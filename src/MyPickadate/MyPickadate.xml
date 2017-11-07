@@ -6,10 +6,18 @@
     <icon />
 
     <properties>
-        <property key="dummyKey" type="string" required="false" defaultValue="">
-            <caption>Dummy key</caption>
-            <category>Appearance</category>
-            <description>This key was added to make the widget work in the Modeler (needs atleast 1 key). Please change/remove this one</description>
+        <property key="datetime" type="attribute" required="true" isPath="optional" pathType="reference">
+            <caption>DateTime</caption>
+            <category>General</category>
+            <description></description>
+            <attributeTypes>
+                <attributeType name="DateTime" />
+            </attributeTypes>
+        </property>
+        <property key="format" type="string" required="false" defaultValue="mm/dd/yyyy">
+            <caption>Date Format</caption>
+            <category>General</category>
+            <description></description>
         </property>
     </properties>
 </widget>

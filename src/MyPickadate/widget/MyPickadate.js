@@ -30,6 +30,10 @@ define([
 
         widgetBase: null,
 
+        //modeler
+        datetime: null,
+        format: null,
+
         // Internal variables.
         _handles: null,
         _contextObj: null,
@@ -47,10 +51,26 @@ define([
             this._contextObj = obj;
 
             // get the target node from the widgetbase
-            var dpNode = this.domNode.querySelector(".datepicker");
-            $(dpNode).pickadate();
+            var $dpNode = $(".datepicker", this.domNode);
 
+            // get the date from the context
+            var dateFromContext = this._contextObj.get(this.datetime);
+            var options = {
+                format: this.format
+            };
+            this.$dp = this._initDatepicker($dpNode, options);
+            this.$dp.set("select", dateFromContext);
             this._updateRendering(callback);
+        },
+
+        /**
+         * Init Date Picker
+         * @param {$clx} $el - jquery element to init the datepicker on
+         * @param {object} options - options to pass to the pickadate initialization
+         */
+        _initDatepicker: function($el, options) {
+            var $input = $el.pickadate(options);
+            return $input.pickadate("picker");
         },
 
         resize: function(box) {

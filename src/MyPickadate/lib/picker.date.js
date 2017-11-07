@@ -7,7 +7,7 @@
 
     // AMD.
     if (typeof define == 'function' && define.amd)
-        define("picker.date", ['picker', "MyPickadate/lib/jquery-1.11.2"], factory)
+        define("MyPickadate/lib/picker.date", ['./picker', "MyPickadate/lib/jquery-1.11.2"], factory)
 
     // Node.js/browserify.
     else if (typeof exports == 'object')
