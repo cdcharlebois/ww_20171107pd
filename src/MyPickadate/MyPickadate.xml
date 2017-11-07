@@ -14,7 +14,7 @@
                 <attributeType name="DateTime" />
             </attributeTypes>
         </property>
-        <property key="format" type="string" required="false" defaultValue="mm/dd/yyyy">
+        <property key="format" type="string" required="true" defaultValue="mm/dd/yyyy">
             <caption>Date Format</caption>
             <category>General</category>
             <description></description>

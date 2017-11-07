@@ -55,11 +55,20 @@ define([
 
             // get the date from the context
             var dateFromContext = this._contextObj.get(this.datetime);
+
+            // options for the datepicker
             var options = {
-                format: this.format
+                format: this.format,
+                onSet: lang.hitch(this, function(thingSet) {
+                    // thingSet = {select: someNumber}
+                    var newDateTime = thingSet.select;
+                    this._contextObj.set(this.datetime, newDateTime);
+                })
             };
+
             this.$dp = this._initDatepicker($dpNode, options);
             this.$dp.set("select", dateFromContext);
+
             this._updateRendering(callback);
         },
 
