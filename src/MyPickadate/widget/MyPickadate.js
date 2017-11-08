@@ -53,9 +53,6 @@ define([
             // get the target node from the widgetbase
             var $dpNode = $(".datepicker", this.domNode);
 
-            // get the date from the context
-            var dateFromContext = this._contextObj.get(this.datetime);
-
             // options for the datepicker
             var options = {
                 format: this.format,
@@ -65,17 +62,54 @@ define([
                     this._contextObj.set(this.datetime, newDateTime);
                 })
             };
-
             this.$dp = this._initDatepicker($dpNode, options);
-            this.$dp.set("select", dateFromContext);
 
+            // get the date from the context
+            var dateFromContext = this._contextObj.get(this.datetime);
+            this._setDatepickerValue(dateFromContext);
+
+            this._resetSubscriptions();
             this._updateRendering(callback);
+        },
+
+        /**
+         * Set Datepicker Value
+         * @param {number} value - the new value (in ms) for the datepicker
+         */
+        _setDatepickerValue: function(value) {
+            this.$dp.set("select", value);
+        },
+
+        /**
+         * Reset Subscriptions
+         * ---
+         * set the obj, attr, (and validation) subscriptions
+         */
+        _resetSubscriptions: function() {
+            this.unsubscribeAll();
+            // object subscription
+            this.subscribe({
+                guid: this._contextObj.getGuid(),
+                callback: lang.hitch(this, function(guid) {
+                    // should update the value in the picker
+                    this._setDatepickerValue(this._contextObj.get(this.datetime));
+                })
+            });
+            // attr subscription
+            this.subscribe({
+                guid: this._contextObj.getGuid(),
+                attr: this.datetime,
+                callback: lang.hitch(this, function(guid, attr, attrvalue) {
+                    this._setDatepickerValue(attrvalue);
+                })
+            });
         },
 
         /**
          * Init Date Picker
          * @param {$clx} $el - jquery element to init the datepicker on
          * @param {object} options - options to pass to the pickadate initialization
+         * @returns {$object} - handle for the jQuery datepicker object
          */
         _initDatepicker: function($el, options) {
             var $input = $el.pickadate(options);
