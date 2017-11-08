@@ -30,6 +30,9 @@ define([
 
         widgetBase: null,
 
+        //nodes
+        errorNode: null,
+
         //modeler
         datetime: null,
         format: null,
@@ -44,6 +47,7 @@ define([
 
         postCreate: function() {
             logger.debug(this.id + ".postCreate");
+            dojoStyle.set(this.errorNode, "display", "none");
         },
 
         update: function(obj, callback) {
@@ -101,8 +105,29 @@ define([
                 attr: this.datetime,
                 callback: lang.hitch(this, function(guid, attr, attrvalue) {
                     this._setDatepickerValue(attrvalue);
+                    dojoStyle.set(this.errorNode, "display", "none");
                 })
             });
+            // validation subscription
+            this.subscribe({
+                guid: this._contextObj.getGuid(),
+                val: true,
+                callback: lang.hitch(this, function(validations) {
+                    this._handleValidations(validations);
+                })
+            });
+        },
+        /**
+         * Handle Validations
+         * ---
+         * Sets the errornode innerHTML and shows the message
+         * @param {object} validations - the validations object from mx
+         */
+        _handleValidations: function(validations) {
+            var v = validations[0],
+                message = v.getReasonByAttribute(this.datetime);
+            dojoHtml.set(this.errorNode, message);
+            dojoStyle.set(this.errorNode, "display", "block");
         },
 
         /**
